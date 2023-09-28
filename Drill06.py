@@ -25,10 +25,13 @@ class BehaviorType(Enum):
     Run = auto()
 
 class Arrow:
-    def __init__(self,path : str,XRange : tuple , YRaage : tuple):
+    def __init__(self,path : str,XRange : tuple , YRaage : tuple,x = 0,y = 0):
+
         self.Object = load_image(path)
-        self.x = randint(XRange[0],XRange[1])
-        self.y = randint(YRaage[0],YRaage[1])
+        self.x = x
+        self.y = y
+
+
 
     def Render(self):
         self.Object.draw(self.x,self.y)
@@ -159,6 +162,13 @@ def HandleEvent(Events = List[Any]):
                 return
 
 
+def ArrowEvent(Events = List[Any], Arrows = List[Any]):
+    for Event in Events:
+        if Event.type == SDL_MOUSEBUTTONDOWN:
+            Arrows.append(  Arrow("hand_arrow.png",(0,1280),(0,1024) ,Event.x,get_canvas_height() - 1 - Event.y  ))
+
+
+
 
 
 Character_IdleImg = ImageObject("_Idle.png", 10, 120, 80)
@@ -174,9 +184,8 @@ MainCharacter.Behavior("Idle")
 BackGround = load_image("TUK_GROUND.png")
 
 
-ar = Arrow("hand_arrow.png",(0,1280),(0,1024))
 
-
+Arrows = []
 Events = []
 
 while Running:
@@ -184,12 +193,15 @@ while Running:
     Events = get_events()
     BackGround.draw(BackGround_Width // 2, BackGround_Height // 2)
 
+    ArrowEvent(Events,Arrows)
 
-    if MainCharacter.MoveToward(ar):
-        ar = Arrow("hand_arrow.png",(0,1280),(0,1024))
+    # if MainCharacter.MoveToward(Arrows[0]):
+    #     ar = Arrow("hand_arrow.png",(0,1280),(0,1024))
 
     MainCharacter.Render(4)
-    ar.Render()
+
+    for ar in Arrows:
+        ar.Render()
 
     delay(0.05)
     HandleEvent(Events)
