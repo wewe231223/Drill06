@@ -195,8 +195,12 @@ while Running:
 
     ArrowEvent(Events,Arrows)
 
-    # if MainCharacter.MoveToward(Arrows[0]):
-    #     ar = Arrow("hand_arrow.png",(0,1280),(0,1024))
+    if any(Arrows):
+        if MainCharacter.MoveToward(Arrows[0]):
+            Arrows.pop(0)
+
+
+
 
     MainCharacter.Render(4)
 
