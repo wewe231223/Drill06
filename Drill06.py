@@ -42,7 +42,7 @@ class Character:
     def __init__(self):
         self.Images = {}
         self.Object : pico2d.Image
-        self.CurrentBehavior = BehaviorType.Idle.name
+        self.CurrentBehavior = None
         self.FrameCount = 0
 
         self.IsComposite = False
@@ -63,6 +63,8 @@ class Character:
         self.Images[BehaviorName] = Img
 
     def Behavior(self,BehaviorName : str):
+        if self.CurrentBehavior == BehaviorName:
+            return
         self.FrameCount = 0
         self.CurrentBehavior = BehaviorName
         self.Object = load_image(self.Images[BehaviorName].Path)
@@ -198,6 +200,8 @@ while Running:
     if any(Arrows):
         if MainCharacter.MoveToward(Arrows[0]):
             Arrows.pop(0)
+    else :
+        MainCharacter.Behavior("Idle")
 
 
 
